@@ -10,12 +10,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.filter.CorsFilter;
 
 import blog.hazelk.login.jwt.JwtAuthenticationFilter;
+import blog.hazelk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+//	private final UserRepository userRepository;
 	private final CorsFilter corsFilter;
 	
 	@Bean

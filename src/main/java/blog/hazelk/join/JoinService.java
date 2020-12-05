@@ -8,6 +8,7 @@ import blog.hazelk.model.User;
 public class JoinService {
 
 	public String join(User user) {
+		System.out.println(user);
 		return null;
 	}
 
