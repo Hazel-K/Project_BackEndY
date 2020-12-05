@@ -15,17 +15,11 @@ public class RestAPIController {
 	private final JoinService joinService;
 	private final BCryptPasswordEncoder passwordEncoder;
 
-	@PostMapping("joinProc")
+	@PostMapping("/joinProc")
 	public String join(@RequestBody User user) {
 		System.out.println("001. join");
 		System.out.println("user: " + user);
-		String result = joinService.join(user);
-		return result;
-	}
-	
-	@PostMapping("login")
-	public String login() {
-		System.out.println("002. login");
-		return "<h1>login<h1>";
+//		String result = joinService.join(user);
+		return null;
 	}
 }
