@@ -23,7 +23,7 @@ public class User{
 	
 	private String nickname; // 별명
 	private String name; // 이름
-	private String addrNum; // 우편번호
+	private String zoneCode; // 우편번호
 	private String address; // 주소
 	private String addrDetail; // 상세주소
 	private String idNumber; // 주민번호
