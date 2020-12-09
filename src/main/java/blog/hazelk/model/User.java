@@ -22,12 +22,13 @@ public class User{
 	private String roles; // 권한 - USER,ADMIN
 	
 	private String nickname; // 별명
-	private String name; // 이름
+	private String fullname; // 이름
 	private String zoneCode; // 우편번호
 	private String address; // 주소
 	private String addrDetail; // 상세주소
 	private String idNumber; // 주민번호
 	private String phone; // 휴대폰번호
+	private String email; // 이메일주소
 	
 	public List<String> getRoleList() {
 		if(this.roles.length() > 0) {
