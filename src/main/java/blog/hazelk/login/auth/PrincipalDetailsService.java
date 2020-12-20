@@ -9,7 +9,7 @@ import blog.hazelk.model.User;
 import blog.hazelk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
-// http://localhost:8080/login 요청 시 동작
+// http://localhost:8080/login Post 요청 시 동작
 @Service
 @RequiredArgsConstructor
 public class PrincipalDetailsService implements UserDetailsService{

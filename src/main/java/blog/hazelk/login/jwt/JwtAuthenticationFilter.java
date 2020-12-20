@@ -1,7 +1,10 @@
 package blog.hazelk.login.jwt;
 
 import java.io.IOException;
+import java.util.Date;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,10 +14,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import blog.hazelk.login.auth.PrincipalDetails;
 import blog.hazelk.model.User;
+import blog.hazelk.variable.JWTProperties;
 import lombok.RequiredArgsConstructor;
 
 /*
@@ -52,5 +58,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		// 이후 PrincipalDetails를 세션에 담고 (안담으면 권한 관리가 안됨) JWT 토큰을 만들어서 응답해주면 됨
 //		return super.attemptAuthentication(request, response); // 구현중에 오류 안내기 위해 부모의 결과 호출
 		return null;
+	}
+	
+	// 위에 attemptAuthentication 함수 성공하면 실행되는 함수
+	// JWT 토큰 만들어서 request 요청한 사용자에게 토큰을 response 하면 됨
+	@Override
+	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
+			Authentication authResult) throws IOException, ServletException {
+		System.out.println("14. successfulAuthentication 실행됨");
+		PrincipalDetails principalDetails = (PrincipalDetails)authResult.getPrincipal();
+		String jwtToken = JWT.create()
+				.withSubject("LoginToken") // 토큰의 이름
+				.withExpiresAt(new Date(System.currentTimeMillis() + JWTProperties.EXPIRATION_TIME)) // 토큰의 유효시간
+				.withClaim("id", principalDetails.getUser().getId()) // 토큰 필수 요소
+				.withClaim("username", principalDetails.getUsername()) // 토큰 필수 요소
+				.sign(Algorithm.HMAC512(JWTProperties.SECRET)); // 토큰 사인
+		
+		response.addHeader("Authorization", "Bearer " + jwtToken); // 토큰을 발급
 	}
 }

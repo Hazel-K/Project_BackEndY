@@ -1,5 +1,5 @@
 package blog.hazelk.variable;
 
-public class Variable {
- public static final String OAuth2DefaultPass = "styleYOauth2!";  
+public class Common {
+	public static final String OAUTH2DEFAULTPASS = "styleYOauth2!";
 }
