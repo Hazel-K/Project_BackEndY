@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.auth0.jwt.JWT;
@@ -76,4 +77,5 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		
 		response.addHeader("Authorization", "Bearer " + jwtToken); // 토큰을 발급
 	}
+	
 }
