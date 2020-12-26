@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,12 +13,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import blog.hazelk.login.auth.PrincipalDetails;
 import blog.hazelk.model.User;
@@ -76,6 +77,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.sign(Algorithm.HMAC512(JWTProperties.SECRET)); // 토큰 사인
 		
 		response.addHeader("Authorization", "Bearer " + jwtToken); // 토큰을 발급
+		
+//		User user = principalDetails.getUser();
+//		user.setPassword("");
+//		Gson gson = new Gson();
+//		response.setHeader("Content-Type", "application/xml");
+//		response.setContentType("text/xml;charset=UTF-8");
+//		response.setCharacterEncoding("UTF-8");
+//		response.addHeader("user", gson.toJson(user));
+//		request.setAttribute("user", gson.toJson(user));
 	}
 	
 }
