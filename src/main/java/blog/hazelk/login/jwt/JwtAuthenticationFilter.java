@@ -5,7 +5,6 @@ import java.util.Date;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,11 +17,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 
 import blog.hazelk.login.auth.PrincipalDetails;
 import blog.hazelk.model.User;
+import blog.hazelk.variable.Common;
 import blog.hazelk.variable.JWTProperties;
+import blog.hazelk.variable.Secret;
 import lombok.RequiredArgsConstructor;
 
 /*
@@ -70,22 +70,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		System.out.println("14. successfulAuthentication 실행됨");
 		PrincipalDetails principalDetails = (PrincipalDetails)authResult.getPrincipal();
 		String jwtToken = JWT.create()
-				.withSubject("LoginToken") // 토큰의 이름
+				.withSubject(Common.LOGINTOKEN) // 토큰의 이름
 				.withExpiresAt(new Date(System.currentTimeMillis() + JWTProperties.EXPIRATION_TIME)) // 토큰의 유효시간
-				.withClaim("id", principalDetails.getUser().getId()) // 토큰 필수 요소
-				.withClaim("username", principalDetails.getUsername()) // 토큰 필수 요소
-				.sign(Algorithm.HMAC512(JWTProperties.SECRET)); // 토큰 사인
+				.withClaim(Common.ID, principalDetails.getUser().getId()) // 토큰 필수 요소
+				.withClaim(Common.USERNAME, principalDetails.getUsername()) // 토큰 필수 요소
+				.sign(Algorithm.HMAC512(Secret.JWTSECRET)); // 토큰 사인
 		
-		response.addHeader("Authorization", "Bearer " + jwtToken); // 토큰을 발급
-		
-//		User user = principalDetails.getUser();
-//		user.setPassword("");
-//		Gson gson = new Gson();
-//		response.setHeader("Content-Type", "application/xml");
-//		response.setContentType("text/xml;charset=UTF-8");
-//		response.setCharacterEncoding("UTF-8");
-//		response.addHeader("user", gson.toJson(user));
-//		request.setAttribute("user", gson.toJson(user));
+		response.addHeader(Common.AUTHORIZATION, Common.BEARER + jwtToken); // 토큰을 발급
 	}
 	
 }

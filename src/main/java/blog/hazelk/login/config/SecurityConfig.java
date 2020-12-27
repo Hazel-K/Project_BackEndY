@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.filter.CorsFilter;
 
 import blog.hazelk.login.jwt.JwtAuthenticationFilter;
+import blog.hazelk.login.jwt.JwtAuthorizationFilter;
 import blog.hazelk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -17,8 +18,8 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-//	private final UserRepository userRepository;
 	private final CorsFilter corsFilter;
+	private final UserRepository userRepository;
 	
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -34,10 +35,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.formLogin().disable() // 로그인 폼 안쓴다
 		.httpBasic().disable() // HTTP 기반 인증 안쓴다
 		.addFilter(new JwtAuthenticationFilter(authenticationManager())) // 별도의 JWT 필터를 사용하겠다. 얘 사용 시 AuthenticationManager를 파라미터로 줘야 함
+		.addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository)) // 권한 인증이 필요한 페이지에서 실행하는 필터를 사용하겠음 마찬가지로 AuthenticationManager를 파라미터로 취함
 		.authorizeRequests() // 권한 요청을 할 건데,
-		.antMatchers("/api/admin/**") // /api/admin/.. 으로 호출하는 모든 것들의 권한은
+		.antMatchers("/admin/**") // /admin/.. 으로 호출하는 모든 것들의 권한은
 		.access("hasRole('ROLE_ADMIN')") // ROLE_ADMIN이 있어야 호출 가능
-		.antMatchers("/api/user/**") // /api/user/.. 로 호출하는 모든 것들의 권한은
+		.antMatchers("/user/**") // /user/.. 로 호출하는 모든 것들의 권한은
 		.access("hasRole('ROLE_USER')") // ROLE_USER가 있어야 호출 가능
 		.anyRequest() // 나머지 요청들은
 		.permitAll() // 전부 허가
